@@ -1,24 +1,30 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Configuration;
+using FarmacorpPOS.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using FarmacorpPOS.Infrastructure;
 
-class Program
+namespace FarmacorpPOS.Presentation
 {
-    static void Main(string[] args)
+    class Program
     {
-        var host = CreateHostBuilder(args).Build();
-        // Run your application logic here
+        static void Main(string[] args)
+        {
+            var host = CreateHostBuilder(args).Build();
+            // Aquí puedes resolver tus servicios y comenzar la lógica de tu aplicación
+        }
+
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureServices((hostContext, services) =>
+                {
+                    // Asegúrate de reemplazar "YourConnectionStringHere" con tu cadena de conexión real
+                    services.AddDbContext<AppDbContext>(options =>
+                    {
+                        options.UseSqlServer("YourConnectionStringHere");
+                    });
+
+                    // Registrar tus servicios, repositorios, etc.
+                });
     }
-
-    public static IHostBuilder CreateHostBuilder(string[] args) =>
-        Host.CreateDefaultBuilder(args)
-            .ConfigureServices((context, services) =>
-            {
-                services.AddDbContext<AppDbContext>(options =>
-                    options.UseSqlServer(context.Configuration.GetConnectionString("DefaultConnection")));
-
-                // Add other services here
-            });
 }

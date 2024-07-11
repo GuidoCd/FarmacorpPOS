@@ -15,4 +15,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\FarmacorpPOS.Domain\FarmacorpPOS.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
