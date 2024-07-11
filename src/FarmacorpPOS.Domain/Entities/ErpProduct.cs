@@ -10,5 +10,6 @@ namespace FarmacorpPOS.Domain.Entities
         public DateTime RegistrationDate { get; set; }
         public int Stock { get; set; }
         public ExpressProduct ExpressProduct { get; set; }
+        public int ExpressProductId { get; set; }
     }
 }

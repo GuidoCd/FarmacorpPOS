@@ -18,6 +18,11 @@ namespace FarmacorpPOS.Infrastructure.Repositories
             _context = context;
         }
 
+        public T Get(int id)
+        {
+            return _context.Set<T>().Find(id);
+        }
+
         public async Task<T> GetByIdAsync(int id)
         {
             return await _context.Set<T>().FindAsync(id);
@@ -28,9 +33,19 @@ namespace FarmacorpPOS.Infrastructure.Repositories
             return await _context.Set<T>().ToListAsync();
         }
 
+        public void Add(T entity)
+        {
+            _context.Set<T>().Add(entity);
+        }
+
         public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate)
         {
             return await _context.Set<T>().Where(predicate).ToListAsync();
+        }
+
+        public  IEnumerable<T> Find(Expression<Func<T, bool>> predicate)
+        {
+            return  _context.Set<T>().Where(predicate).ToList();
         }
 
         public async Task AddAsync(T entity)

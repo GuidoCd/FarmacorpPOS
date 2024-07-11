@@ -9,5 +9,10 @@ namespace FarmacorpPOS.Infrastructure.Repositories
         public ExpressProductRepository(AppDbContext context) : base(context)
         {
         }
+
+        public ExpressProduct Get(int productId)
+        {
+            return _context.Set<ExpressProduct>().FirstOrDefault(p => p.Id == productId);
+        }
     }
 }

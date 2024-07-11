@@ -13,5 +13,6 @@ namespace FarmacorpPOS.Domain.Interfaces
         IErpProductRepository ErpProducts { get; }
         IBarcodeRepository Barcodes { get; }
         Task<int> CompleteAsync();
+        int Complete();
     }
 }

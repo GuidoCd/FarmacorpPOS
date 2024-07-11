@@ -9,5 +9,6 @@ namespace FarmacorpPOS.Infrastructure.Repositories
         public ErpProductRepository(AppDbContext context) : base(context)
         {
         }
+        
     }
 }

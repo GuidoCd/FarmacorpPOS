@@ -45,7 +45,7 @@ namespace FarmacorpPOS.Infrastructure.Data
                 entity.Property(e => e.Price).IsRequired().HasColumnType("decimal(18,2)");
                 entity.Property(e => e.IsActive).IsRequired();
                 entity.Property(e => e.ExpirationDate).IsRequired();
-                entity.Property(e => e.Remarks).HasMaxLength(250);
+                entity.Property(e => e.Observations).HasMaxLength(250);
                 entity.HasOne(e => e.ProductType)
                       .WithMany()
                       .HasForeignKey(e => e.ProductTypeId);

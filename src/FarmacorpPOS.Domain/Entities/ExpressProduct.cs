@@ -9,7 +9,7 @@ namespace FarmacorpPOS.Domain.Entities
         public decimal Price { get; set; }
         public bool IsActive { get; set; }
         public DateTime ExpirationDate { get; set; }
-        public string Remarks { get; set; }
+        public string Observations { get; set; }
         public int ProductTypeId { get; set; }
         public ProductType ProductType { get; set; }
     }

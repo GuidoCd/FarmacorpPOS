@@ -9,5 +9,10 @@ namespace FarmacorpPOS.Infrastructure.Repositories
         public ProductCategoryRepository(AppDbContext context) : base(context)
         {
         }
+
+        public IEnumerable<ProductCategory> Find(int productId)
+        {
+            return _context.Set<ProductCategory>().Where(pc => pc.ProductId == productId).ToList();
+        }
     }
 }
