@@ -3,6 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using FarmacorpPOS.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using FarmacorpPOS.Domain.Interfaces;
+using FarmacorpPOS.Infrastructure.Repositories;
 
 namespace FarmacorpPOS.Presentation
 {
@@ -24,7 +26,8 @@ namespace FarmacorpPOS.Presentation
                         options.UseSqlServer("YourConnectionStringHere");
                     });
 
-                    // Registrar tus servicios, repositorios, etc.
+                    // Registrar UnitOfWork y los repositorios
+                    services.AddScoped<IUnitOfWork, UnitOfWork>();
                 });
     }
 }
