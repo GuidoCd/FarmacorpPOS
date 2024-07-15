@@ -1,10 +1,13 @@
 ﻿using System;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+using FarmacorpPOS.Infrastructure.Services;
 using FarmacorpPOS.Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
-using FarmacorpPOS.Domain.Interfaces;
 using FarmacorpPOS.Infrastructure.Repositories;
+using FarmacorpPOS.Domain.Interfaces;
+using FarmacorpPOS.Domain.Entities;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
+using System.IO;
 
 namespace FarmacorpPOS.Presentation
 {
@@ -12,22 +15,89 @@ namespace FarmacorpPOS.Presentation
     {
         static void Main(string[] args)
         {
-            var host = CreateHostBuilder(args).Build();
-            // Aquí puedes resolver tus servicios y comenzar la lógica de tu aplicación
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+
+            IConfiguration configuration = builder.Build();
+
+            var serviceProvider = new ServiceCollection()
+                .AddDbContext<AppDbContext>(options => 
+                    options.UseSqlServer(
+                        configuration.GetConnectionString("DefaultConnection"),
+                        sqlServerOptions => sqlServerOptions.EnableRetryOnFailure()
+                    ))
+                .AddScoped<IUnitOfWork, UnitOfWork>()
+                .AddScoped<ERPProductService>()
+                .AddScoped<SaleService>()
+                .BuildServiceProvider();
+
+            var productService = serviceProvider.GetService<ERPProductService>();
+            var saleService = serviceProvider.GetService<SaleService>();
+
+            while (true)
+            {
+                Console.WriteLine("Choose an option:");
+                Console.WriteLine("1. Register new product");
+                Console.WriteLine("2. Register sale");
+                Console.WriteLine("3. Exit");
+
+                var option = Console.ReadLine();
+
+                if (option == "1")
+                {
+                    RegisterNewProduct(productService);
+                }
+                else if (option == "2")
+                {
+                    RegisterSale(saleService);
+                }
+                else if (option == "3")
+                {
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid option. Try again.");
+                }
+            }
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureServices((hostContext, services) =>
-                {
-                    // Asegúrate de reemplazar "YourConnectionStringHere" con tu cadena de conexión real
-                    services.AddDbContext<AppDbContext>(options =>
-                    {
-                        options.UseSqlServer("YourConnectionStringHere");
-                    });
+        private static void RegisterNewProduct(ERPProductService productService)
+        {
+            Console.WriteLine("Enter product name:");
+            var name = Console.ReadLine();
 
-                    // Registrar UnitOfWork y los repositorios
-                    services.AddScoped<IUnitOfWork, UnitOfWork>();
-                });
+            Console.WriteLine("Enter product cost:");
+            var cost = decimal.Parse(Console.ReadLine());
+
+            Console.WriteLine("Enter product stock:");
+            var stock = int.Parse(Console.ReadLine());
+
+            Console.WriteLine("Enter product type ID:");
+            var productTypeId = int.Parse(Console.ReadLine());
+
+            productService.RegisterNewProduct(name, cost, stock, productTypeId);
+            Console.WriteLine("Product registered successfully.");
+        }
+
+        private static void RegisterSale(SaleService saleService)
+        {
+            Console.WriteLine("Enter product ID:");
+            var productId = int.Parse(Console.ReadLine());
+
+            Console.WriteLine("Enter quantity:");
+            var quantity = int.Parse(Console.ReadLine());
+
+            try
+            {
+                saleService.RegisterSale(productId, quantity);
+                Console.WriteLine("Sale registered successfully.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+        }
     }
 }

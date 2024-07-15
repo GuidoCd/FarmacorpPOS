@@ -9,6 +9,11 @@ namespace FarmacorpPOS.Infrastructure.Repositories
         public ErpProductRepository(AppDbContext context) : base(context)
         {
         }
+
+        public ErpProduct Get(int id)
+        {
+            return _context.ErpProducts.Find(id);
+        }
         
     }
 }
