@@ -5,6 +5,9 @@ namespace FarmacorpPOS.Infrastructure.Data
 {
     public class AppDbContext : DbContext
     {
+        public AppDbContext()
+        {
+        }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
@@ -19,6 +22,7 @@ namespace FarmacorpPOS.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             // Configuración de Fluent API para Category
             modelBuilder.Entity<Category>(entity =>
             {
@@ -104,6 +108,32 @@ namespace FarmacorpPOS.Infrastructure.Data
                       .WithMany()
                       .HasForeignKey(e => e.ProductId);
             });
+
+            modelBuilder.Entity<Category>().HasData(
+                new Category { Id = 1, Description = "Category 1", IsActive = true },
+                new Category { Id = 2, Description = "Category 2", IsActive = true },
+                new Category { Id = 3, Description = "Category 3", IsActive = true },
+                new Category { Id = 4, Description = "Category 4", IsActive = true },
+                new Category { Id = 5, Description = "Category 5", IsActive = true },
+                new Category { Id = 6, Description = "Category 6", IsActive = true },
+                new Category { Id = 7, Description = "Category 7", IsActive = true },
+                new Category { Id = 8, Description = "Category 8", IsActive = true },
+                new Category { Id = 9, Description = "Category 9", IsActive = true },
+                new Category { Id = 10, Description = "Category 10", IsActive = true }
+            );
+
+            modelBuilder.Entity<ProductType>().HasData(
+                new ProductType { Id = 1, Description = "ProductType 1" },
+                new ProductType { Id = 2, Description = "ProductType 2" },
+                new ProductType { Id = 3, Description = "ProductType 3" },
+                new ProductType { Id = 4, Description = "ProductType 4" },
+                new ProductType { Id = 5, Description = "ProductType 5" },
+                new ProductType { Id = 6, Description = "ProductType 6" },
+                new ProductType { Id = 7, Description = "ProductType 7" },
+                new ProductType { Id = 8, Description = "ProductType 8" },
+                new ProductType { Id = 9, Description = "ProductType 9" },
+                new ProductType { Id = 10, Description = "ProductType 10" }
+            );
         }
     }
 }

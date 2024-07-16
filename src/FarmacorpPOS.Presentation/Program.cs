@@ -3,7 +3,6 @@ using FarmacorpPOS.Infrastructure.Services;
 using FarmacorpPOS.Infrastructure.Data;
 using FarmacorpPOS.Infrastructure.Repositories;
 using FarmacorpPOS.Domain.Interfaces;
-using FarmacorpPOS.Domain.Entities;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
@@ -24,8 +23,7 @@ namespace FarmacorpPOS.Presentation
             var serviceProvider = new ServiceCollection()
                 .AddDbContext<AppDbContext>(options => 
                     options.UseSqlServer(
-                        configuration.GetConnectionString("DefaultConnection"),
-                        sqlServerOptions => sqlServerOptions.EnableRetryOnFailure()
+                        configuration.GetConnectionString("DefaultConnection")
                     ))
                 .AddScoped<IUnitOfWork, UnitOfWork>()
                 .AddScoped<ERPProductService>()
